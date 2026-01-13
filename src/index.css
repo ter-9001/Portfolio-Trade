@@ -1,0 +1,541 @@
+
+
+        :root
+        {
+            --backgroundColor: #2d2d2d;
+            --backgroundAccent: #4e4d4d;
+            --backgroundDarker: #1b1b1b;
+            --purple: #cc23ff;
+            --purpleShine: #e283ff;
+            --purpleDark: #701b8a;
+            --blueDark: #00009c;
+            --blueDarker: #020230;
+            --skintone: #fe9b9e;
+            --skintoneDark: #754648;
+
+        }
+
+        body
+        {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--backgroundColor);
+            color: white;
+        }
+
+
+        nav
+        {
+            width: 100%;
+            text-transform: uppercase;
+        }
+
+        main
+        {
+            display: grid; /* Ativa o Grid Layout */
+            grid-template-columns: 0.6fr 2fr 1fr;/* Cria 3 colunas, cada uma ocupando 1 fração (1fr) do espaço disponível  para cada section (painel) */
+            gap: 10px; 
+            width: 100%; 
+            margin-top: 15px;
+        }
+
+        /*each section  is a panel */
+
+        section
+        {
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+            border: 0.2px solid var(--backgroundAccent);
+            border-radius: 23px;
+            padding: 5px;
+            min-height: 100vh;
+            
+
+        }
+
+        /* each line on the first and third section */
+
+        section div
+        {
+            margin: 5px 0;
+        }
+
+
+        /*form for all line on the first section, one in the first and two in anothers */
+    
+
+        .form__group {
+            position: relative;
+            padding: 15px 0 0;
+            margin-top: 10px;
+            width: 100%;
+            }
+
+            .form__field {
+            width: 100%;
+            border: 0;
+            border-bottom: 0.2px solid var(--backgroundAccent);
+            outline: 0;
+            font-size: 1.3rem;
+            color: white;
+            padding: 7px 0;
+            background: transparent;
+            transition: border-color 0.2s;
+            text-transform: capitalize;
+
+            &::placeholder {
+                color: transparent;
+            }
+
+            &:placeholder-shown ~ .form__label {
+                font-size: 13px; /*placehold before click*/
+                cursor: text;
+                top: 25px;
+            }
+
+            
+
+            
+            }
+
+            .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 13px;
+            color: var(--purple);
+            }
+
+            .form__field:focus {
+            ~ .form__label {
+                position: absolute;
+                top: 0;
+                display: block;
+                transition: 0.2s;
+                font-size: 13px; /* placehold after click */
+                color: var(--purpleShine);
+                font-weight:700;    
+            }
+            padding-bottom: 6px;  
+            font-weight: 700;
+            border-width: 3px;
+            border-image: linear-gradient(to right, transparent, transparent); /*background of input when clicked*/
+            border-image-slice: 1;
+            }
+
+
+            /* reset input */
+            .form__field{
+            &:required,&:invalid { box-shadow:none; }
+            }
+
+            .form__field
+            {
+                font-size: 10px;
+            }
+
+
+            /* each line of section skiping first*/
+            .inline
+            {
+                display: inline-flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: end;
+                margin: 5px;
+                width: 100%;
+            }
+
+            .inline select
+            {
+                margin: 0 5px 0 0;
+            }
+
+            .form__field.tiny
+            {
+                width: 90%;
+            }
+
+            .inline .form__group.tiny .form__field
+            {
+                &:placeholder-shown ~ .form__label {
+                font-size: 10px; /*placehold before click*/
+                cursor: text;
+                top: 0px;
+                }
+            }
+
+            .inline .form__group.tiny .form__field:focus, .inline .form__group.tiny .form__label 
+            {
+                font-size: 10px;
+            }
+
+            select option
+            {
+                background-color: var(--backgroundColor);
+            }
+
+            /* Last line of first section */
+
+            button
+            {
+                margin: 25px 0;
+                background-color: var(--purple);
+                color: white;
+                font-size: 0.6em;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                border-width: initial;
+                border-style: none;
+                border-color: initial;
+                border-image: initial;
+                padding: 15px 30px;
+                border-radius: 50px;
+                gap: 8px;
+                transition: background-color 0.2s;
+            }
+
+            button:hover
+            {
+                background-color: var(--purpleShine);
+            }
+
+
+            /*CALENDAR PART */
+
+
+            /*caledar open/hide button */
+
+            #calendarSwitch
+            {
+                padding: 4px 15px;
+                width: 100%;
+                display: flex;
+                text-align: center;
+                justify-content: center;
+                margin: 0;
+                margin-bottom: 10px;
+                
+
+            }
+
+            /*calendar container: Where is the button to open calendar and the calendar */
+
+            .calendar_container
+            {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: var(--purple);
+                
+                
+            }
+
+            /*real caledar style */
+
+            
+            
+            .calendar {
+            width: 350px;
+            background-color: var(--backgroundDarker);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            }
+
+
+
+            .calendar.show
+            {
+                z-index: 2;
+                display: block;
+                position: absolute;
+                animation-name: slideDownFadeIn; 
+                animation-duration: 0.8s;        
+                animation-timing-function: ease-out; 
+                animation-fill-mode: forwards;   
+                
+                /* Estado inicial (importante para que ele comece invisível) */
+                opacity: 0;
+                
+            }
+
+           
+
+            @keyframes slideDownFadeIn {
+                /* 0% (Início da animação) */
+                from {
+                    opacity: 0;
+                    /* Move o elemento para 30px acima de sua posição final */
+                    transform: translateY(30px); 
+                }
+
+                /* 100% (Fim da animação) */
+                to {
+                    opacity: 1;
+                    /* Retorna o elemento para sua posição original */
+                    transform: translateY(130px);
+                }
+            }
+
+            .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            }
+            .calendar-header button {
+            background-color: transparent;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            }
+            #month-year {
+            font-size: 1.2em;
+            font-weight: bold;
+            }
+            .calendar-weekdays, .calendar-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            }
+            .calendar-weekdays div, .calendar-dates div {
+            text-align: center;
+            padding: 10px;
+            }
+            .calendar-weekdays {
+            background-color: #eaeef3;
+            }
+            .calendar-weekdays div {
+            font-weight: bold;
+            }
+            .calendar-dates div {
+            cursor: pointer;
+            }
+            .calendar-dates div:hover {
+            background-color: #f1f1f1;
+            }
+
+            /* day that already gone */
+
+            .calendar-dates .unable
+            {
+                color: var(--backgroundAccent);
+                font-style: italic;
+            }
+
+
+            /* Selected date div */
+
+            .selectDay
+            {
+                background-color: var(--backgroundAccent);
+                border-radius: 10px;
+                border-width: 0;
+            }
+
+            /*END CALENDAR PART */
+
+
+            /*START PIZZA GRAFIC PART */
+
+            .all_pizza_container
+            {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                width: 100%;
+                align-items: center;
+
+
+            }
+
+            .pizza_container
+            {
+                padding: 15px;
+                border: none;
+                margin: 0;
+                min-height: 500px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 0.2px solid var(--backgroundAccent);
+
+            }
+
+            /*  Border to see the division in elements   */
+            .pizza_container:nth-child(odd)
+            {
+                border-right: 0.2px solid var(--backgroundAccent);
+            }
+
+            /*take out the border of last two elements */
+
+            .pizza_container:nth-last-child(-n + 2)
+            {
+                border-bottom: none;
+            }
+
+            .all_pizza_container label
+            {
+                padding: 5px 0;
+                font-size: 13px;
+                color: var(--purple);
+
+            }
+
+
+            .pizzaChart
+            {
+                width: 100%;
+                height: auto;
+                margin: 8px;
+            }
+
+
+
+
+            /*END PIZZA GRAFIC PART*/
+
+
+            /*THIRD PANEL PART */
+            #thirdPanel
+            {
+                color: var(--purple);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: start;
+            }
+
+            #thirdPanel div
+            {
+                width: 95%;
+            }
+
+
+            #thirdPanel .center, #thirdPanel .investiment_characteristics.title
+            {
+                display: flex;
+                text-align: center;
+                flex-direction: column;
+               
+
+                
+            }
+
+            #thirdPanel .center
+            {
+                border-bottom: 0.2px solid var(--backgroundAccent);
+                width: 100%;
+                margin: 0; padding: 0;
+
+            }
+
+            /*
+            
+            .investiment => container of each investment
+            .investment_
+            
+            */
+            
+            #thirdPanel .investiment
+            {
+                padding: 5px;
+                border: none;
+                border-bottom: 0.2px solid var(--backgroundAccent);
+                width: 100%;
+            }
+
+            #thirdPanel .investiment div
+            {
+                width: 95%;
+            }
+
+           
+
+
+
+
+            
+
+
+            #thirdPanel span
+            {
+                font-size: 12px;
+                margin: 0;
+                padding: 0;
+            }
+
+            #thirdPanel p
+            {
+                color: var(--backgroundAccent);
+                margin: 0; padding: 0;
+            }
+
+
+            /* show % of each forecast */
+
+            .investiment_characteristics:last-child
+            {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .investiment_characteristics:last-child span
+            {
+                text-align: center;
+            }
+
+
+            .investiment_characteristics .rate
+            {
+                width: 100%;
+                margin: 0 5px;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 2px;
+
+            }
+
+            .investiment_characteristics .rate div
+            {
+                font-size: 10px;
+                display: flex;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+
+
+
+            /*END THIRD PANEL PART */
+
+
+            /*Part of Warn value exceeded */
+
+            .alert-container {
+                margin-top: -10px; /* Gruda na div de cima */
+                margin-bottom: 10px;
+                padding-left: 5px;
+            }
+
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-in;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-5px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+
+
+
+

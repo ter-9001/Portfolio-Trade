@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Calendar</title>
+  <style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        }
+
+        
+        /*CALENDAR PART */
+
+        /*calendar container: Where is the button to open calendar and the calendar */
+
+        .calendar_container
+        {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*real caledar style */
+
+        
+        
+        .calendar {
+        width: 350px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        visibility: hidden;
+        }
+
+
+
+        .calendar.show
+        {
+            z-index: 2;
+            visibility: visible;
+
+            animation-name: slideDownFadeIn; 
+            animation-duration: 0.8s;        
+            animation-timing-function: ease-out; 
+            animation-fill-mode: forwards;   
+            
+            /* Estado inicial (importante para que ele comece invisível) */
+            opacity: 0;
+        }
+
+        @keyframes slideDownFadeIn {
+            /* 0% (Início da animação) */
+            from {
+                opacity: 0;
+                /* Move o elemento para 30px acima de sua posição final */
+                transform: translateY(-30px); 
+            }
+
+            /* 100% (Fim da animação) */
+            to {
+                opacity: 1;
+                /* Retorna o elemento para sua posição original */
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        }
+        .calendar-header button {
+        background-color: transparent;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        }
+        #month-year {
+        font-size: 1.2em;
+        font-weight: bold;
+        }
+        .calendar-weekdays, .calendar-dates {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        }
+        .calendar-weekdays div, .calendar-dates div {
+        text-align: center;
+        padding: 10px;
+        }
+        .calendar-weekdays {
+        background-color: #eaeef3;
+        }
+        .calendar-weekdays div {
+        font-weight: bold;
+        }
+        .calendar-dates div {
+        border-bottom: 1px solid #eaeef3;
+        cursor: pointer;
+        }
+        .calendar-dates div:hover {
+        background-color: #f1f1f1;
+        }
+
+
+            /* Selected date div */
+
+            .selectDay
+            {
+                background-color: var(--backgroundAccent);
+                border-radius: 10px;
+                border-width: 0;
+            }
+  </style>
+</head>
+<body>
+  
+
+  <div class="calendar_container">
+    <button id="calendarSwitch"> Open Calendar </button>
+    <div class="calendar">
+        <div class="calendar-header">
+        <button id="prev-month">‹</button>
+        <div id="month-year"></div>
+        <button id="next-month">›</button>
+        </div>
+        <div class="calendar-body">
+        <div class="calendar-weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            </div>
+
+        <div class="calendar-dates">
+            <!-- Dates will be populated here -->
+        </div>
+        </div>
+    </div>
+  </div>  
+
+  <script>
+    const calendarDates = document.querySelector('.calendar-dates');
+    const monthYear = document.getElementById('month-year');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const calendarSwitch = document.getElementById('calendarSwitch');
+    const calendar = document.querySelector('.calendar')
+
+
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    function renderCalendar(month, year) {
+        calendarDates.innerHTML = '';
+        monthYear.textContent = `${months[month]} ${year}`;
+
+        // Get the first day of the month
+        const firstDay = new Date(year, month, 1).getDay();
+
+        // Get the number of days in the month
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // Create blanks for days of the week before the first day
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement('div');
+    calendarDates.appendChild(blank);
+  }
+
+  // Populate the days
+  for (let i = 1; i <= daysInMonth; i++) {
+    const day = document.createElement('div');
+    day.textContent = i;
+    calendarDates.appendChild(day);
+  }
+
+
+ //take each div day and colect its date when click
+  var days = document.querySelectorAll('.calendar-dates div');
+
+    
+
+    days.forEach(div => {
+        
+        div.addEventListener('click', () => { 
+            
+            let clickedDate = new Date(currentYear, currentMonth, div.innerHTML);
+
+            // Exibindo a data clicada
+            console.log(clickedDate);
+            days.forEach( div => div.classList.remove('selectDay'))
+
+            div.classList.add('selectDay')
+            
+
+        });
+    });
+}
+
+// CLose calendar when click out calendar
+document.addEventListener('click', (event) => {
+            const isClickInside = calendar.contains(event.target);
+
+            if (!isClickInside) {
+                // The click was OUTSIDE the calendar
+                calendar.classList.add('hidden'); // Hide the element
+            } 
+});
+
+calendar.addEventListener('mouseout', () => {
+
+       calendar.classList.remove('show') 
+
+})
+
+renderCalendar(currentMonth, currentYear);
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Todo o seu código que interage com o DOM deve estar aqui
+    
+});
+
+//switch to show/hide calendar
+var calendarSwitchindex = 0;
+
+calendarSwitch.addEventListener('click', () => {
+
+    calendarSwitchindex ++;
+
+    calendar.classList.toggle('show', calendarSwitchindex % 2 !== 0);
+
+
+})
+
+prevMonthBtn.addEventListener('click', () => {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  renderCalendar(currentMonth, currentYear);
+});
+
+nextMonthBtn.addEventListener('click', () => {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  renderCalendar(currentMonth, currentYear);
+});
+
+
+
+
+  </script>
+</body>
+</html>

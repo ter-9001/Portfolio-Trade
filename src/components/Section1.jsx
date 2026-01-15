@@ -1,74 +1,77 @@
-import React, { useState } from 'react';
+import React from "react";
 
-
-export const Section1 = ({ totalValue, setTotalValue, investments, setInvestments, updateInvestment }) => {
-  
-  // Helper para converter valores (pode estar em um arquivo utils)
-  const getAbsoluteValue = (amount, total) => {
-    const strAmount = String(amount).replace(',', '.').trim();
-    if (strAmount.endsWith('%')) return (parseFloat(strAmount) || 0) / 100 * total;
-    return parseFloat(strAmount) || 0;
-  };
-
-  const totalAlocado = investments.reduce((acc, inv) => acc + getAbsoluteValue(inv.amount, totalValue), 0);
-  const isOverLimit = totalAlocado > totalValue;
+export const Section1 = ({ 
+  totalValue, setTotalValue, investments, setInvestments, 
+  updateInvestment, availableStocks, totalAllocated, isOverLimit 
+}) => {
 
   const addInvestment = () => {
-    setInvestments([...investments, { id: Date.now(), type: '', amount: '' }]);
+    setInvestments([...investments, { id: Date.now(), type: "", amount: "" }]);
   };
 
   return (
-    <section>
-      {/* INPUT DO VALOR TOTAL (ATUALIZA O APP.JSX) */}
+    <section className="section-input">
+      {/* Campo de Valor Total */}
       <div className="form__group">
-        <input 
-          type="number" 
-          className={`form__field ${isOverLimit ? 'field-error' : ''}`} 
-          placeholder="Total Investment Value" 
-          // O segredo está aqui: onChange atualiza o estado no pai (App.jsx)
+        <input
+          type="number"
+          className={`form__field ${isOverLimit ? "field-error" : ""}`}
+          placeholder="Total Investment Value"
+          value={totalValue || ""}
           onChange={(e) => setTotalValue(Number(e.target.value))}
-          id="total-investment"
-          required 
+          id="total-inv"
         />
-        <label htmlFor="total-investment" className="form__label"> 
-          Total Investment Value 
-        </label>
+        <label htmlFor="total-inv" className="form__label">Total Investment Value</label>
       </div>
 
-      {/* RENDERIZAÇÃO DOS INVESTIMENTOS ADICIONAIS */}
-
+      {/* Lista Dinâmica de Investimentos */}
       {investments.map((inv) => (
         <React.Fragment key={inv.id}>
           <div className="inline">
             <div className="form__group tiny">
-              <select className="form__field tiny" onChange={(e) => updateInvestment(inv.id, 'type', e.target.value)}>
-                <option value="">--Type--</option>
-                <option value="Stocks">Stocks</option>
-                <option value="Crypto">Crypto</option>
+              <select
+                className="form__field tiny"
+                value={inv.type}
+                onChange={(e) => updateInvestment(inv.id, "type", e.target.value)}
+              >
+                <option value="">-- Asset --</option>
+                {availableStocks.map((stock) => (
+                  <option key={stock.symbol} value={stock.symbol}>
+                    {stock.symbol} - {stock.name}
+                  </option>
+                ))}
               </select>
+              <label className="form__label">Investment type</label>
             </div>
+
             <div className="form__group tiny">
-              <input 
-                type="text" 
-                className={`form__field ${isOverLimit ? 'field-error' : ''}`} 
+              <input
+                type="text"
+                className={`form__field ${isOverLimit ? "field-error" : ""}`}
                 placeholder="Val or %"
-                onChange={(e) => updateInvestment(inv.id, 'amount', e.target.value)}
+                value={inv.amount}
+                onChange={(e) => updateInvestment(inv.id, "amount", e.target.value)}
               />
+              <label className="form__label">Value or %</label>
             </div>
           </div>
 
-          {/* O ALERTA APARECE AQUI SE ESTIVER ACIMA DO LIMITE */}
+          {/* Alerta de Erro Dinâmico */}
           {isOverLimit && (
             <div className="alert-container animate-fade-in">
-              <span className="alert-text" style={{ color: 'red', fontSize: '12px' }}>
-                ⚠️ Warning: Total (R$ {totalAlocado.toFixed(2)}) exceeds limit of R$ {totalValue}!
+              <span className="alert-text">
+                ⚠️ Total R$ {totalAllocated.toFixed(2)} exceeds R$ {totalValue}!
               </span>
             </div>
           )}
         </React.Fragment>
       ))}
-      
-      <button onClick={addInvestment}>Add Investment</button>
+
+      <div className="inline last">
+        <button type="button" onClick={addInvestment}>
+          + Add Investment
+        </button>
+      </div>
     </section>
   );
 };

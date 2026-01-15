@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 export const Section3 = ({totalValue, enrichedInvestments }) =>
 {
-    var rates = {};
-   
+    
 
 return (
   <section id='thirdPanel'>
@@ -18,38 +17,37 @@ return (
         </div>
       ) : (
         /* Primeiro loop: percorre a lista de investimentos */
-        enrichedInvestments.map((inv, index) => (
+        enrichedInvestments.map((inv, index) => {
+          
+          //variavel para salvar as rates para a div especifica
+          var rates = {};
+          
+          return(
           <div className="investiment">
             {/* Div agrupando cada bloco de investimento */}
             
             {/* Segundo loop: percorre as propriedades de CADA investimento */}
+           
             {Object.entries(inv).map(([key, value]) => 
                 
                 
             {
-
-            var keyRate = `${key}Rate`;
-                
-            
+            // filtrando as rates para a div exclusiva delas
             if (key.includes('tax'))
             {
+                //salvando as rates na variavel externa ao loop map inv
                 rates[key] = value;
-
-                console.log('rates', rates);
-
-
+                //são 3 rates, então quando o tamanho for igual a 3: todos as rates foram salvas em rates
                 if(Object.keys(rates).length == 3)
                     return (
                 
                     <div key={key} className="investiment_characteristics">
+                      <span> Rates: </span>
+
                         <div className="rate">
-                            <span>{key}: </span> <p>{String(value)}</p>
+                            {Object.entries(rates).map(([key, value]) => (<div> <span>{key}: </span> <p>{String(value)}</p> </div>))}
                         </div>   
-                    </div>   
-                    
-                
-                
-                    )
+                    </div>   )
 
             }
             else
@@ -68,7 +66,9 @@ return (
             )}
             
           </div>
-        ))
+        )}      
+      
+      )
       )}
     
   </section>

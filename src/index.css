@@ -411,10 +411,7 @@
                 justify-content: start;
             }
 
-            #thirdPanel div
-            {
-                width: 95%;
-            }
+            
 
 
             #thirdPanel .center, #thirdPanel .investiment_characteristics.title
@@ -439,7 +436,7 @@
             /*
             
             .investiment => container of each investment
-            .investment_
+            .investiment_characteristics ==> each line of investiment
             
             */
             
@@ -451,11 +448,7 @@
                 width: 100%;
             }
 
-            #thirdPanel .investiment div
-            {
-                width: 95%;
-            }
-
+            
            
 
 

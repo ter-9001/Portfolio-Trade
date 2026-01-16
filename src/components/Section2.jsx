@@ -6,6 +6,8 @@ export const Section2 = ({ totalValue, investments, isOverLimit, totalAllocated,
   const chartRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const chartInstances = useRef([]);
 
+  var totalProfit = []; 
+
   useEffect(() => {
     // Cores e Labels base
     const originalColors = ['#cc23ff', '#00009c', '#fe9b9e', '#2d2d2d'];
@@ -49,7 +51,7 @@ export const Section2 = ({ totalValue, investments, isOverLimit, totalAllocated,
         options: {
           responsive: true,
           plugins: {
-            legend: { display: !isOverLimit && index === 0 }, // Legenda só no primeiro para não poluir
+            // legend: { display: !isOverLimit && index === 0 }, // Legenda só no primeiro para não poluir
             tooltip: {
               callbacks: {
                 label: (context) => ` $ ${context.parsed.toLocaleString()}`
@@ -69,6 +71,10 @@ export const Section2 = ({ totalValue, investments, isOverLimit, totalAllocated,
       const rate = parseFloat(inv.tax6Rate) / 100 || 0;
       return inv.investedAmount * (1 + rate);
     });
+
+   
+
+
     renderChart(1, "6 Months Rate", data6m);
 
     // --- 3. Projeção 12 Meses ---
@@ -76,6 +82,10 @@ export const Section2 = ({ totalValue, investments, isOverLimit, totalAllocated,
       const rate = parseFloat(inv.tax12Rate) / 100 || 0;
       return inv.investedAmount * (1 + rate);
     });
+
+
+   
+
     renderChart(2, "12 Months Rate", data12m);
 
     // --- 4. Projeção 3 Meses ---
@@ -83,31 +93,58 @@ export const Section2 = ({ totalValue, investments, isOverLimit, totalAllocated,
       const rate = parseFloat(inv.tax3Rate) / 100 || 0;
       return inv.investedAmount * (1 + rate);
     });
+
+
+ //saving the profit of all mouth, bit check if they already created.
+
+          var valueLacking = (totalValue > totalAllocated) ? totalValue - totalAllocated : 0;
+
+
+          document.getElementById('presentDay').innerHTML = "Total: " + totalValue;
+          
+          document.getElementById('3mounth').innerHTML = `Total: ${(data3m.reduce((acc, val) => acc + val, 0) + valueLacking).toFixed(2)}`;
+
+          document.getElementById('12mounth').innerHTML = `Total: ${(data12m.reduce((acc, val) => acc + val, 0) + valueLacking).toFixed(2)}`;
+
+          document.getElementById('6mounth').innerHTML = `Total: ${(data6m.reduce((acc, val) => acc + val, 0) + valueLacking).toFixed(2)}`;
+    
+
+
     renderChart(3, "3 Months Rate", data3m);
 
   }, [investments, totalValue, isOverLimit, enrichedInvestments]);
+
+  console.log('profit: ',totalProfit)
 
   return (
     <section>
       <div className="all_pizza_container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         <div className={`pizza_container ${isOverLimit ? 'chart-invalid' : ''}`}>
-          <label className="selectDay_label"> Present Day </label>                
+          <label className="selectDay_label"> Present Day </label>
           <canvas ref={chartRefs[0]}></canvas>
+          <h5 id='presentDay'> </h5>
+
+          
         </div>
 
         <div className={`pizza_container ${isOverLimit ? 'chart-invalid' : ''}`}>
           <label className="selectDay_label"> 6 Months Projection </label>                
           <canvas ref={chartRefs[1]}></canvas>
+          <h5 id='6mounth'> </h5>
         </div>
 
         <div className={`pizza_container ${isOverLimit ? 'chart-invalid' : ''}`}>
           <label className="selectDay_label"> 12 Months Projection </label>                
           <canvas ref={chartRefs[2]}></canvas>
+          <h5 id='12mounth'> </h5>
+
         </div>
 
         <div className={`pizza_container ${isOverLimit ? 'chart-invalid' : ''}`}>
           <label className="selectDay_label"> 3 Months Projection </label>                
           <canvas ref={chartRefs[3]}></canvas>
+          <h5 id='3mounth'> </h5>
+
         </div>
       </div>
     </section>

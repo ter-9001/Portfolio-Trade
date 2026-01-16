@@ -26,7 +26,9 @@
         nav
         {
             width: 100%;
-            text-transform: uppercase;
+            text-align: center;
+            color: var(--purple);
+            text-transform: capitalize;
         }
 
         main
@@ -347,7 +349,7 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 width: 100%;
-                align-items: center;
+                align-items: start;
 
 
             }
@@ -357,7 +359,7 @@
                 padding: 15px;
                 border: none;
                 margin: 0;
-                min-height: 500px;
+                height: 700px;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -395,6 +397,8 @@
                 margin: 8px;
             }
 
+
+            
 
 
 

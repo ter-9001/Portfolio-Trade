@@ -15,7 +15,7 @@ export default function App() {
   const [marketTrends, setMarketTrends] = useState({});
 
 
- const API_KEY = '107M829NEEI9X1VR'
+ const API_KEY = import.meta.env.API_KEY
 
 
 

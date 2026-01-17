@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: './',
   plugins: [react()],
+  base: '/', // Use './' se o site for ficar em uma subpasta, mas '/' é o padrão para Netlify
+  build: {
+    outDir: 'dist', // Pasta que será gerada
+  }
 })

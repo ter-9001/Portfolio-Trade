@@ -1,6 +1,6 @@
-# 📈 Portfolio Trade: Predictive Wealth Management Dashboard (Beta Version)
+# 📈 Trade Simulator: Predictive Wealth Management Dashboard (Beta Version)
 
-**Portfolio Trade** is a high-performance financial simulation platform built with **React.js**. It enables investors to move beyond simple tracking by providing a robust environment for projecting wealth growth across multiple market scenarios (**Optimistic**, **Median**, and **Pessimistic**).
+**Trade Simulator** is a high-performance financial simulation platform built with **React.js**. It enables investors to move beyond simple tracking by providing a robust environment for projecting wealth growth across multiple market scenarios (**Optimistic**, **Median**, and **Pessimistic**).
 
 The application features a sophisticated three-panel interface designed for maximum data density and user focus, allowing for real-time asset allocation adjustments and instant feedback on portfolio risk and performance.
 
